@@ -1,14 +1,33 @@
-const express = require('express');
+const express = require("express");
 const app = express();
+const http = require("http").createServer(app);
+const io = require("socket.io")(http, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+  allowEIO3: false,
+});
+const { socketOnReceiveEmit } = require("./src/utils");
 
-const http = require('http').createServer(app);
 app.use(express.json());
+app.use(express.urlencoded());
 
+io.on("connection", (socket) => {
+  socket.on("join room", (data) => {
+    socket.join(data.roomName);
 
-app.get("/", (req, res) =>{
-    res.send({message: "Hello world"});
+    socket.on("newMessage", (dataMsg) => {
+      socket.to(data.roomName).emit("updateMessages", dataMsg);
+    });
+
+    // socketOnReceiveEmit(socket, "newMessage", "updateMessages", data.roomName);
+  });
+});
+
+app.get("/", (req, res) => {
+  res.send({ message: "Hello world" });
 });
 
 const PORT = process.env.PORT || 5001;
 
-http.listen(PORT, ()=> console.log(PORT));
+http.listen(PORT, () => console.log(PORT));
