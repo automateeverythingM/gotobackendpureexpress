@@ -20,6 +20,7 @@ io.on("connection", (socket) => {
     const initState = RoomService.userJoinRoom(roomName, user);
 
     io.to(socket.id).emit("initialState", initState);
+    socket.to(roomName).emit("newUser", user);
 
     socket.on("newMessage", (dataMsg) => {
       RoomService.pushMessageToRoom(roomName, dataMsg);
