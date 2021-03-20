@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const RoomService = require("./src/service/RoomService");
 const http = require("http").createServer(app);
 const io = require("socket.io")(http, {
   cors: {
@@ -7,17 +8,22 @@ const io = require("socket.io")(http, {
   },
   allowEIO3: false,
 });
-const { socketOnReceiveEmit } = require("./src/utils");
 
 app.use(express.json());
 app.use(express.urlencoded());
 
 io.on("connection", (socket) => {
   socket.on("join room", (data) => {
-    socket.join(data.roomName);
+    const { roomName, user } = data;
+
+    socket.join(roomName);
+    const initState = RoomService.userJoinRoom(roomName, user);
+
+    io.to(socket.id).emit("initialState", initState);
 
     socket.on("newMessage", (dataMsg) => {
-      socket.to(data.roomName).emit("updateMessages", dataMsg);
+      RoomService.pushMessageToRoom(roomName, dataMsg);
+      socket.to(roomName).emit("updateMessages", dataMsg);
     });
 
     // socketOnReceiveEmit(socket, "newMessage", "updateMessages", data.roomName);
