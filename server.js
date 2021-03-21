@@ -2,15 +2,18 @@ const express = require("express");
 const app = express();
 const RoomService = require("./src/service/RoomService");
 const http = require("http").createServer(app);
+const dotenv = require("dotenv");
 const io = require("socket.io")(http, {
   cors: {
-    origin: ["https://gotofront.herokuapp.com"],
+    origin: "http://localhost:3000",
   },
   allowEIO3: false,
 });
-
+dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded());
+
+console.log(process.env.CORS);
 
 io.on("connection", (socket) => {
   socket.on("join room", (data) => {
