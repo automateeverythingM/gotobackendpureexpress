@@ -25,6 +25,14 @@ class RoomService {
 
     room.pushMessage(message);
   }
+
+  leaveRoom(roomName, user) {
+    const selectedRoom = RoomRepository.findRoomByName(roomName);
+    selectedRoom.removeUser(user.uid);
+    if (selectedRoom.isRoomEmpty) {
+      RoomRepository.removeRoom(roomName);
+    }
+  }
 }
 
 const instance = new RoomService();

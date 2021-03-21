@@ -1,21 +1,26 @@
 const Room = require("../model/room");
 class RoomRepository {
   constructor() {
-    this.roomList = [];
+    this.roomList = {};
   }
 
   saveRoom(roomName) {
     const newRoom = new Room(roomName);
-    this.roomList.push(newRoom);
+    // this.roomList.push(newRoom);
+    this.roomList[roomName] = newRoom;
     return newRoom;
   }
 
   findRoomByName(roomName) {
-    return this.roomList.find((x) => x.name === roomName);
+    return this.roomList[roomName];
   }
 
   isRoomExist(roomName) {
     return this.findRoomByName(roomName) || false;
+  }
+
+  removeRoom(roomName) {
+    delete this.roomList[roomName];
   }
 }
 

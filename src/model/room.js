@@ -6,17 +6,19 @@ class Room {
   }
 
   addUser(user) {
-    this.users.push(user);
+    this.users = [...this.users, user];
+    // this.users.push(user);
     return user;
   }
 
   removeUser(id) {
-    this.users.filter((user) => user.socketId !== id);
-    return user;
+    this.users = this.users.filter((user) => user.uid !== id);
   }
 
   pushMessage(message) {
-    this.messages.push(message);
+    this.messages = [...this.messages, message];
+    // this.messages.push(message);
+    return message;
   }
 
   get roomState() {
@@ -24,7 +26,7 @@ class Room {
   }
 
   get isRoomEmpty() {
-    return !!this.messages.length;
+    return this.users.length === 0;
   }
 }
 
