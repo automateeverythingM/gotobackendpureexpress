@@ -7,7 +7,7 @@ const { socketOnReceiveEmit, messageGenerator } = require("./src/utils");
 const { MESSAGE_TYPE } = require("./src/utils/actions");
 const io = require("socket.io")(http, {
   cors: {
-    origin: "https://gotoexpress.herokuapp.com/",
+    origin: "https://gotofront.vercel.app/",
   },
   allowEIO3: false,
 });
