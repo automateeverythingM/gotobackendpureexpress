@@ -15,9 +15,11 @@
   "author": "goto team",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "loadsh": "0.0.4",
     "mongodb": "^3.6.5",
+    "nanoid": "^3.1.22",
     "socket.io": "^4.0.0"
   }
 }
