@@ -1,10 +1,6 @@
 const RoomRepository = require("../repository/roomRepository");
 class RoomService {
   userJoinRoom(roomName, user) {
-    console.log(
-      "🚀 ~ file: RoomService.js ~ line 4 ~ RoomService ~ userJoinRoom ~ user",
-      user
-    );
     const isRoomExist = RoomRepository.isRoomExist(roomName);
 
     if (isRoomExist) {
@@ -29,6 +25,7 @@ class RoomService {
   leaveRoom(roomName, user) {
     const selectedRoom = RoomRepository.findRoomByName(roomName);
     selectedRoom.removeUser(user.uid);
+
     if (selectedRoom.isRoomEmpty) {
       RoomRepository.removeRoom(roomName);
     }
