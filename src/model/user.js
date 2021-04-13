@@ -1,9 +1,21 @@
-class User {
-  constructor(uid, name, avatar) {
-    this.uid = uid;
-    this.name = name;
-    this.avatar = avatar;
-  }
-}
+const mongoose = require("mongoose");
 
-module.exports = User;
+exports.UserSchema = new mongoose.Schema({
+  uid: {
+    type: String,
+    required: true,
+  },
+  displayName: {
+    type: String,
+    required: true,
+  },
+  photoUrl: {
+    type: String,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+module.exports = mongoose.model("User", UserSchema);

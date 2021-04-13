@@ -2,9 +2,14 @@ const express = require("express");
 const app = express();
 const RoomService = require("./src/service/RoomService");
 const http = require("http").createServer(app);
-const dotenv = require("dotenv");
+const dotenv = require("dotenv").config();
+const cors = require("cors");
 const { socketOnReceiveEmit, messageGenerator } = require("./src/utils");
 const { MESSAGE_TYPE } = require("./src/utils/actions");
+const connectDB = require("./src/data/mongoDB");
+
+connectDB();
+
 const io = require("socket.io")(http, {
   cors: {
     origin: "https://gotofront.vercel.app",
@@ -12,7 +17,7 @@ const io = require("socket.io")(http, {
   allowEIO3: false,
 });
 
-dotenv.config();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
 
@@ -64,4 +69,9 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5001;
 
-http.listen(PORT, () => console.log(PORT));
+http.listen(PORT, () =>
+  console.log(
+    `Server is running in ${process.env.NODE_ENV} mode on port `,
+    PORT
+  )
+);

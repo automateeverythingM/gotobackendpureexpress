@@ -1,34 +1,45 @@
+const Room = require("../model/room");
 const RoomRepository = require("../repository/roomRepository");
+const { roomStateDTO } = require("../model/DTO/roomStateDTO");
 class RoomService {
-  userJoinRoom(roomName, user) {
-    const isRoomExist = RoomRepository.isRoomExist(roomName);
+  async userJoinRoom(roomName, user) {
+    const isRoomExist = await Room.findOne({ name: roomName });
 
     if (isRoomExist) {
-      isRoomExist.addUser(user);
+      isRoomExist.users.push(user);
+
       console.log("room already exist");
-      return isRoomExist.roomState;
-    } else {
-      console.log("room created");
-      const room = RoomRepository.saveRoom(roomName);
-      room.addUser(user);
-
-      return room.roomState;
+      //TODO: debug return
+      isRoomExist.save();
+      return roomStateDTO(isRoomExist);
     }
+
+    console.log("New room");
+
+    const newRoom = Room.create({ name: roomName });
+    newRoom.users.push(user);
+
+    newRoom.save();
+    return roomStateDTO(newRoom);
   }
 
-  pushMessageToRoom(roomName, message) {
-    const room = RoomRepository.findRoomByName(roomName);
+  async pushMessageToRoom(roomName, message) {
+    const room = await Room.findOne(roomName, message);
+    room.messages.push(message);
 
-    room.pushMessage(message);
+    room.save();
   }
 
-  leaveRoom(roomName, user) {
-    const selectedRoom = RoomRepository.findRoomByName(roomName);
-    selectedRoom.removeUser(user.uid);
+  async leaveRoom(roomName, user) {
+    const room = await Room.findOne(roomName, message);
+
+    room.users.pull({ uid: user.uid });
 
     if (selectedRoom.isRoomEmpty) {
       RoomRepository.removeRoom(roomName);
     }
+
+    room.save();
   }
 }
 

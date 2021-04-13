@@ -1,31 +1,27 @@
-const Room = require("../model/room");
-class RoomRepository {
-  constructor() {
-    this.roomList = {};
-  }
+// const Room = require("../model/Room");
+// class RoomRepository {
+//   saveRoom(roomName) {
+//     const newRoom = new Room(roomName);
+//     // this.roomList.push(newRoom);
+//     this.roomList[roomName] = newRoom;
+//     return newRoom;
+//   }
 
-  saveRoom(roomName) {
-    const newRoom = new Room(roomName);
-    // this.roomList.push(newRoom);
-    this.roomList[roomName] = newRoom;
-    return newRoom;
-  }
+//   findRoomByName(roomName) {
+//     return this.roomList[roomName];
+//   }
 
-  findRoomByName(roomName) {
-    return this.roomList[roomName];
-  }
+//   isRoomExist(roomName) {
+//     return this.findRoomByName(roomName) || false;
+//   }
 
-  isRoomExist(roomName) {
-    return this.findRoomByName(roomName) || false;
-  }
+//   removeRoom(roomName) {
+//     delete this.roomList[roomName];
+//   }
+// }
 
-  removeRoom(roomName) {
-    delete this.roomList[roomName];
-  }
-}
+// const instance = new RoomRepository();
 
-const instance = new RoomRepository();
+// Object.freeze(instance);
 
-Object.freeze(instance);
-
-module.exports = instance;
+// module.exports = instance;

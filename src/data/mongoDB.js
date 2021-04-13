@@ -1,12 +1,18 @@
-const MongoClient = require("mongodb").MongoClient;
-const uri =
-  "mongodb+srv://miner:rCsME7eqMhhwxAyX@cluster0.it5uo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-client.connect((err) => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
-});
+const mongoose = require("mongoose");
+
+const connectDB = async () => {
+  try {
+    const conn = mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    });
+
+    console.log(`mongoDB Connected ${(await conn).connection.host}`);
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+};
+
+module.exports = connectDB;
