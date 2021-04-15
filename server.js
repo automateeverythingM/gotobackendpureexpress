@@ -21,8 +21,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded());
 
-console.log(process.env.CORS);
-
 io.on("connection", (socket) => {
   socket.on("join room", async (data) => {
     const { roomName, user } = data;
@@ -42,8 +40,6 @@ io.on("connection", (socket) => {
     const updatedUser = await RoomService.userExistsOrCreateNew(user);
     io.to(socket.id).emit("updateUser", updatedUser);
   });
-
-  // socketOnReceiveEmit(socket, "registerUser", null, async (_, user) => {});
 
   socketOnReceiveEmit(socket, "typing", "userTyping");
   socketOnReceiveEmit(socket, "stopTyping", "userStopTyping");
@@ -78,9 +74,4 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5001;
 
-http.listen(PORT, () =>
-  console.log(
-    `Server is running in ${process.env.NODE_ENV} mode on port `,
-    PORT
-  )
-);
+http.listen(PORT);
