@@ -12,7 +12,7 @@ connectDB();
 
 const io = require("socket.io")(http, {
   cors: {
-    origin: "https://gotofront.vercel.app",
+    origin: "http://localhost:3000",
   },
   allowEIO3: false,
 });
@@ -24,18 +24,26 @@ app.use(express.urlencoded());
 console.log(process.env.CORS);
 
 io.on("connection", (socket) => {
-  socket.on("join room", (data) => {
+  socket.on("join room", async (data) => {
     const { roomName, user } = data;
 
     socket.join(roomName);
-    const initState = RoomService.userJoinRoom(roomName, user);
+    RoomService.userJoinRoom(roomName, user, (initState) => {
+      io.to(socket.id).emit("initialState", initState);
+    });
 
-    io.to(socket.id).emit("initialState", initState);
     socket.to(roomName).emit("newUser", {
       message: messageGenerator(MESSAGE_TYPE.USER_JOIN, user),
     });
     // socketOnReceiveEmit(socket, "newMessage", "updateMessages", data.roomName);
   });
+
+  socket.on("registerUser", async (user) => {
+    const updatedUser = await RoomService.userExistsOrCreateNew(user);
+    io.to(socket.id).emit("updateUser", updatedUser);
+  });
+
+  // socketOnReceiveEmit(socket, "registerUser", null, async (_, user) => {});
 
   socketOnReceiveEmit(socket, "typing", "userTyping");
   socketOnReceiveEmit(socket, "stopTyping", "userStopTyping");
@@ -51,14 +59,15 @@ io.on("connection", (socket) => {
 
   socketOnReceiveEmit(socket, "leaveRoom", null, (roomName, data) => {
     const { user } = data;
-    RoomService.leaveRoom(roomName, user);
-    socket.leave(roomName);
-    socket.to(roomName).emit("userLeft", {
-      message: messageGenerator(MESSAGE_TYPE.USER_LEFT, user),
+    RoomService.leaveRoom(roomName, user, () => {
+      socket.leave(roomName);
+      socket.to(roomName).emit("userLeft", {
+        message: messageGenerator(MESSAGE_TYPE.USER_LEFT, user),
+      });
     });
   });
 
-  socket.on("disconnecting", () => {
+  socket.on("disconnecting", (data) => {
     console.log("disconnecting fired");
   });
 });

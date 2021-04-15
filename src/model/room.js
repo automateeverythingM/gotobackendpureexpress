@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { UserSchema } = require("./User");
 const RoomSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -8,10 +7,17 @@ const RoomSchema = new mongoose.Schema({
   },
   users: [
     {
-      UserSchema,
+      type: String,
+      ref: "User",
+      unique: true,
     },
   ],
   messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
+
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("Room", RoomSchema);
