@@ -12,12 +12,12 @@ connectDB();
 
 const io = require("socket.io")(http, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://gotofront.vercel.app",
   },
   allowEIO3: false,
 });
 
-app.use(cors());
+app.use(cors({ origin: "https://gotofront.vercel.app" }));
 app.use(express.json());
 app.use(express.urlencoded());
 
