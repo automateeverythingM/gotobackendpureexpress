@@ -1,8 +1,8 @@
 const Room = require("../model/room");
 const RoomRepository = require("../repository/roomRepository");
 const { roomStateDTO } = require("../model/DTO/roomStateDTO");
-const User = require("../model/User");
-const Message = require("../model/Message");
+const User = require("../model/user");
+const Message = require("../model/message");
 class RoomService {
   async userExistsOrCreateNew(user) {
     const existingUser = await User.findById(user.uid);
