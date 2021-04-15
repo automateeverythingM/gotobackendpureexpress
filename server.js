@@ -33,7 +33,6 @@ io.on("connection", (socket) => {
     socket.to(roomName).emit("newUser", {
       message: messageGenerator(MESSAGE_TYPE.USER_JOIN, user),
     });
-    // socketOnReceiveEmit(socket, "newMessage", "updateMessages", data.roomName);
   });
 
   socket.on("registerUser", async (user) => {
@@ -74,4 +73,4 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5001;
 
-http.listen(PORT);
+http.listen(PORT, console.log("on port " + PORT));
