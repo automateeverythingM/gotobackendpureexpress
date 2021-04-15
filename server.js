@@ -7,8 +7,6 @@ const { socketOnReceiveEmit, messageGenerator } = require("./src/utils");
 const { MESSAGE_TYPE } = require("./src/utils/actions");
 const connectDB = require("./src/data/mongoDB");
 
-connectDB();
-
 const io = require("socket.io")(http, {
   cors: {
     origin: "https://gotofront.vercel.app",
@@ -72,4 +70,7 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5001;
 
-http.listen(PORT, console.log("on port " + PORT));
+http.listen(PORT, () => {
+  connectDB();
+  console.log("on port " + PORT);
+});
