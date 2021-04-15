@@ -16,7 +16,6 @@
   "author": "goto team",
   "license": "MIT",
   "dependencies": {
-    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "loadsh": "0.0.4",

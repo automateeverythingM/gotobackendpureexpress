@@ -3,7 +3,6 @@ const app = express();
 const RoomService = require("./src/service/RoomService");
 const http = require("http").createServer(app);
 const dotenv = require("dotenv").config();
-// const cors = require("cors");
 const { socketOnReceiveEmit, messageGenerator } = require("./src/utils");
 const { MESSAGE_TYPE } = require("./src/utils/actions");
 const connectDB = require("./src/data/mongoDB");
