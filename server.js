@@ -9,7 +9,7 @@ const connectDB = require("./src/data/mongoDB");
 
 const io = require("socket.io")(http, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://gotofront.vercel.app",
   },
   allowEIO3: false,
 });
