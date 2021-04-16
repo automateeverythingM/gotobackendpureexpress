@@ -5,13 +5,11 @@ const Message = require("../model/Message");
 class RoomService {
   async userExistsOrCreateNew(user) {
     const existingUser = await User.findById(user.uid);
-    if (!existingUser) {
-      const newUser = await User.create({ ...user, _id: user.uid });
-      await newUser.save((err) => console.error(err));
-      return newUser;
-    }
+    if (existingUser) return existingUser;
 
-    return existingUser;
+    const newUser = await User.create({ ...user, _id: user.uid });
+    await newUser.save((err) => console.error(err));
+    return newUser;
   }
 
   async roomExistsOrCreateNew(roomName) {
@@ -39,7 +37,15 @@ class RoomService {
   }
 
   async pushMessageToRoom(roomName, { user, ...message }, callback) {
-    const newMessage = new Message({ ...message, user: user.uid });
+    console.log(
+      "🚀 ~ file: RoomService.js ~ line 42 ~ RoomService ~ pushMessageToRoom ~ message",
+      message
+    );
+    const newMessage = new Message({ ...message, user });
+    console.log(
+      "🚀 ~ file: RoomService.js ~ line 43 ~ RoomService ~ pushMessageToRoom ~ newMessage",
+      newMessage
+    );
 
     newMessage.save(async function (err, message) {
       if (err) console.error(err);
