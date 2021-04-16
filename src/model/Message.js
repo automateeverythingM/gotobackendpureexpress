@@ -10,7 +10,7 @@ const MessageSchema = mongoose.Schema({
   user: { type: String, ref: "User" },
   type: {
     name: {
-      String,
+      type: String,
     },
   },
 });
